@@ -1,29 +1,13 @@
-$nav-color: #3E474F;
-
 html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   margin-bottom: 60px;
 }
-nav{
-  background-color: $nav-color;
-  
-  .nav-item {
-    > .active{
-      border-radius: 0;
-      background-color: #e3e3e3;
-      color:black;
-    }
 
-    > .nav-link:not(.active){
-      color: #555;
-    }
-  }
-}
-
-.footer {
+footer {
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -31,6 +15,7 @@ nav{
   line-height: 60px;
   background-color: #f5f5f5;
 }
+
 .form-inline{
   display: inline;
 }

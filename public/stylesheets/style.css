@@ -5,16 +5,7 @@ html {
 body {
   margin-bottom: 60px; }
 
-nav {
-  background-color: #3E474F; }
-  nav .nav-item > .active {
-    border-radius: 0;
-    background-color: #e3e3e3;
-    color: black; }
-  nav .nav-item > .nav-link:not(.active) {
-    color: #555; }
-
-.footer {
+footer {
   position: absolute;
   bottom: 0;
   width: 100%;
