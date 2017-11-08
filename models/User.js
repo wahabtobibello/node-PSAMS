@@ -14,11 +14,6 @@ var nameSchema = new Schema({
 });
 var userSchema = new Schema({
   name: nameSchema,
-  schoolIdNumber: {
-    type: Number,
-    required: true,
-    unique: true
-  },
   password: {
     type: String,
     required: true,
