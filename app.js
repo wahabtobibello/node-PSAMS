@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
+var cookieSession = require("cookie-session");
+require('dotenv').config();
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -29,13 +31,19 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cookieSession({
+  name: "access_token",
+  keys: [process.env.COOKIE_SECRET],
+  maxAge: 60 * 60 * 1000 // 1 hour
+}))
+
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/psams', { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.once('open', function () {
   // we're connected!
   console.log("Connected to Database!!")
 })
@@ -44,14 +52,14 @@ app.use('/', index);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
