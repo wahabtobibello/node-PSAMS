@@ -29,6 +29,4 @@ node_modules
 # Debug log from npm
 npm-debug.log
 
-# Output CSS
-public/stylesheets/style.css
-public/stylesheets/style.css.map
+.env
