@@ -11,6 +11,7 @@
     "debug": "~3.1.0",
     "express": "~4.16.2",
     "mongoose": "^4.12.0",
+    "mongoose-bcrypt": "^1.5.0",
     "morgan": "~1.9.0",
     "node-sass-middleware": "~0.11.0",
     "pug": "~2.0.0-rc.4",
