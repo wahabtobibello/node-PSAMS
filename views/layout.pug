@@ -1,11 +1,24 @@
 doctype html
 html
   head
-    title= title
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    title Project Supervision Appointment Management System
     link(rel='stylesheet', href='/node_modules/bootstrap/dist/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    block header
+      header: nav.navbar.navbar-expand-md.navbar-dark.bg-dark
+        button.navbar-toggler(type="button", data-toggle="collapse", 
+          data-target="#navbarNavDropdown", aria-controls="navbarNavDropdown", aria-expanded="false", 
+          aria-label="Toggle navigation"): span.navbar-toggler-icon
+        a.navbar-brand(href=".") Project Supervision Appointment Management System
+        div.collapse.navbar-collapse(id="navbarNavDropdown"): ul.navbar-nav.ml-auto
+          li.nav-item: a.nav-link(href="#") Log In
+          li.nav-item: a.nav-link(href="#") Register
     block content
+    block footer
+      footer: div.container: span.text-muted &copy; Group 1 
     script(src="/node_modules/jquery/dist/jquery.min.js")
     script(src="/node_modules/popper.js/dist/umd/popper.min.js")
     script(src="/node_modules/bootstrap/dist/js/bootstrap.min.js")
