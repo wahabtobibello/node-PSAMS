@@ -1,24 +1,25 @@
 extends layout
 
 block content  
-  div.container
-    div.col-md-6.offset-md-3
+  .container
+    .col-md-6.offset-md-3
       h3.mt-4.mb-3 Register
       hr/
       form(action="/register", method="post")
-        div.form-group
-          label(for="firstName") First Name
-          input.form-control(id="firstName", name="firstName")
-        div.form-group
-          label(for="lastName") Last Name
-          input.form-control(id="lastName", name="lastName")
-        div.form-group
-          label(for="matricNumber") Matric No.
+        .form-row
+          .form-group.col-md-6
+            label(for="firstName") First Name
+            input.form-control(id="firstName", name="firstName")
+          .form-group.col-md-6 
+            label(for="lastName") Last Name
+            input.form-control(id="lastName", name="lastName")
+        .form-group
+          label(for="matricNumber") Matric No. 
           input.form-control(id="matricNumber" name="matricNumber" type="number")
-        div.form-group
+        .form-group
           label(for="password") Password
           input.form-control(id="password" name="password"  type="password")
-        div.form-group
+        .form-group
           label(for="confirmPassword") Confirm Password
           input.form-control(id="confirmPassword" name="confirmPassword"  type="password")
         button.btn.btn-dark.btn-block(type="submit") Register

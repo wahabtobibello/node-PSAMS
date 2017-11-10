@@ -13,12 +13,13 @@ html
           data-target="#navbarNavDropdown", aria-controls="navbarNavDropdown", aria-expanded="false", 
           aria-label="Toggle navigation"): span.navbar-toggler-icon
         a.navbar-brand(href=".") Project Supervision Appointment Management System
-        div.collapse.navbar-collapse(id="navbarNavDropdown"): ul.navbar-nav.ml-auto
+        .collapse.navbar-collapse(id="navbarNavDropdown"): ul.navbar-nav.ml-auto
           li.nav-item: a.nav-link(href="#") Log In
           li.nav-item: a.nav-link(href="#") Register
+    block alert
     block content
     block footer
-      footer: div.container: span.text-muted &copy; Group 1 
+      footer: .container: span.text-muted &copy; Group 1 
     script(src="/node_modules/jquery/dist/jquery.min.js")
     script(src="/node_modules/popper.js/dist/umd/popper.min.js")
     script(src="/node_modules/bootstrap/dist/js/bootstrap.min.js")
