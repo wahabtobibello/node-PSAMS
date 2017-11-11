@@ -1,5 +1,8 @@
 var mongoose = require('mongoose');
+var autopopulate = require("mongoose-autopopulate");
+
 var User = require('./User');
+
 var Schema = mongoose.Schema;
 
 var studentSchema = new Schema({
@@ -9,9 +12,13 @@ var studentSchema = new Schema({
     unique: true
   },
   supervisor: {
-    type: ObjectID,
-    ref: "Supervisor"
+    type: Schema.Types.ObjectId,
+    ref: "Supervisor",
+    required: true,
+    autopopulate: true
   }
-})
+}, { discriminatorKey: 'role' })
+
+studentSchema.plugin(autopopulate);
 
 module.exports = User.discriminator("Student", studentSchema);
