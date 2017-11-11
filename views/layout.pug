@@ -17,7 +17,7 @@ html
           li.nav-item: a.nav-link(href="#") Log In
           li.nav-item: a.nav-link(href="#") Register
     block alert
-      for message in flash
+      while message = flash.shift()
         .alert.alert-dismissible.fade.show(class=`alert-${message.type}`, role="alert") #{message.message}
           button.close(type="button", data-dismiss="alert" aria-label="Close")
             span(aria-hidden="true") &times;
