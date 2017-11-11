@@ -19,8 +19,7 @@ var userSchema = new Schema({
     required: true,
     bcrypt: true
   }
-});
+}, { discriminatorKey: 'role' });
 userSchema.plugin(mongooseBcrypt);
 
-module.exports.User = mongoose.model("User", userSchema);
-module.exports.UserSchema = userSchema;
+module.exports = mongoose.model("User", userSchema);
