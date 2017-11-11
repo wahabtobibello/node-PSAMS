@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var cookieSession = require("cookie-session");
+var flash = require('flash');
 require('dotenv').config();
 
 var index = require('./routes/index');
@@ -36,6 +37,7 @@ app.use(cookieSession({
   keys: [process.env.COOKIE_SECRET],
   maxAge: 60 * 60 * 1000 // 1 hour
 }))
+app.use(flash());
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/psams', { useMongoClient: true });
