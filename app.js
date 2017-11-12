@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var sassMiddleware = require('node-sass-middleware');
 var cookieSession = require("cookie-session");
 var flash = require('flash');
+var helmet = require('helmet');
+var csrf = require('csurf');
 require('dotenv').config();
 
 var index = require('./routes/index');
@@ -35,9 +37,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieSession({
   name: "access_token",
   keys: [process.env.COOKIE_SECRET],
-  maxAge: 60 * 60 * 1000 // 1 hour
+  maxAge: 60 * 60 * 1000, // 1 hour
+  domain: process.env.COOKIE_DOMAIN,
+  secure: true,
+  httpOnly: true
 }))
 app.use(flash());
+app.use(helmet());
+app.use(csrf({ cookie: true }));
 
 var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/psams', { useMongoClient: true });
