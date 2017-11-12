@@ -9,17 +9,19 @@ block content
         .form-row
           .form-group.col-md-6
             label(for="firstName") First Name
-            input.form-control(id="firstName", name="firstName")
+            input.form-control(id="firstName", name="firstName", value=`${data ? data.firstName : ""}` required)
           .form-group.col-md-6 
             label(for="lastName") Last Name
-            input.form-control(id="lastName", name="lastName")
+            input.form-control(id="lastName", name="lastName", value=`${data ? data.lastName : ""}` required)
         .form-group
           label(for="matricNumber") Matric No. 
-          input.form-control(id="matricNumber" name="matricNumber" type="number")
+          input.form-control(id="matricNumber" name="matricNumber" type="number", value=`${data ? data.matricNumber : ""}` required)
         .form-group
           label(for="password") Password
-          input.form-control(id="password" name="password"  type="password")
+          input.form-control(id="password" name="password"  type="password" required)
         .form-group
           label(for="confirmPassword") Confirm Password
-          input.form-control(id="confirmPassword" name="confirmPassword"  type="password")
+          input.form-control(id="confirmPassword" name="confirmPassword"  type="password" required)
+        .form-group
+          input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
         button.btn.btn-dark.btn-block(type="submit") Register

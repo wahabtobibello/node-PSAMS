@@ -1,15 +1,17 @@
 extends layout
 
 block content  
-  div.container
-    div.col-md-6.offset-md-3
+  .container
+    .col-md-6.offset-md-3
       h3.mt-4.mb-3 Log In
       hr/
       form(action="/login", method="post")
-        div.form-group
+        .form-group
           label(for="matricNumber") Matric No.
           input.form-control(id="matricNumber", name="matricNumber", type="number")
-        div.form-group
+        .form-group
           label(for="password") Password
           input.form-control(id="password", name="password", type="password")
+        .form-group
+          input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
         button.btn.btn-primary(type="submit") Log In
