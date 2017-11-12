@@ -14,8 +14,11 @@ html
           aria-label="Toggle navigation"): span.navbar-toggler-icon
         a.navbar-brand(href=".") Project Supervision Appointment Management System
         .collapse.navbar-collapse(id="navbarNavDropdown"): ul.navbar-nav.ml-auto
-          li.nav-item: a.nav-link(href="#") Log In
-          li.nav-item: a.nav-link(href="#") Register
+          if isAuthenticated
+            li.nav-item: a.nav-link(href="/logout") Logout
+          else
+            li.nav-item: a.nav-link(href="/login") Log In
+            li.nav-item: a.nav-link(href="/register") Register
     block alert
       while message = flash.shift()
         .alert.alert-dismissible.fade.show(class=`alert-${message.type}`, role="alert") #{message.message}
