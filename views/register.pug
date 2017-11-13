@@ -9,13 +9,13 @@ block content
         .form-row
           .form-group.col-md-6
             label(for="firstName") First Name
-            input.form-control(id="firstName", name="firstName", value=`${data ? data.firstName : ""}` required)
+            input.form-control(id="firstName", name="firstName", value=`${firstName || ""}` required)
           .form-group.col-md-6 
             label(for="lastName") Last Name
-            input.form-control(id="lastName", name="lastName", value=`${data ? data.lastName : ""}` required)
+            input.form-control(id="lastName", name="lastName", value=`${lastName || ""}` required)
         .form-group
           label(for="matricNumber") Matric No. 
-          input.form-control(id="matricNumber" name="matricNumber" type="number", value=`${data ? data.matricNumber : ""}` required)
+          input.form-control(id="matricNumber" name="matricNumber" type="number", value=`${matricNumber || ""}` required)
         .form-group
           label(for="password") Password
           input.form-control(id="password" name="password"  type="password" required)

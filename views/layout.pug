@@ -14,7 +14,7 @@ html
           aria-label="Toggle navigation"): span.navbar-toggler-icon
         a.navbar-brand(href=".") Project Supervision Appointment Management System
         .collapse.navbar-collapse(id="navbarNavDropdown"): ul.navbar-nav.ml-auto
-          if isAuthenticated
+          if isLoggedIn
             li.nav-item: a.nav-link(href="/logout") Logout
           else
             li.nav-item: a.nav-link(href="/login") Log In
