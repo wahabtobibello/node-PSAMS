@@ -16,7 +16,9 @@ var studentSchema = new Schema({
     ref: "Supervisor",
     required: true,
     autopopulate: true
-  }
+  },
+  profilePicture: Buffer,
+  projectTopic: String
 }, { discriminatorKey: 'role' })
 
 studentSchema.plugin(autopopulate);
