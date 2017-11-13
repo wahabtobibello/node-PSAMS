@@ -3,7 +3,8 @@ var jwt = require('jsonwebtoken');
 
 var Student = require("../models/Student");
 var Supervisor = require("../models/Supervisor");
-var mid = require("../middlewares");
+var User = require("../models/User");
+var middleware = require("../middlewares");
 var sendErrorMessage = require("../helpers").sendErrorMessage;
 
 var router = express.Router();
@@ -32,10 +33,23 @@ router
   });
 router.get("/logout", function (req, res, next) {
   req.session = null;
-  res.redirect("/login");
-
+  res.redirect("/");
 })
-router.get("/test", function (req, res, next) {
+
+// router.get("/test", function (req, res, next) {
+// var supervisor = new Supervisor({
+//   name: {
+//     first: "Albert",
+//     last: "Einstein"
+//   },
+//   staffNumber: 123456789,
+//   password: "nutella"
+// })
+// supervisor.save(function (err, sup) {
+//   if (err) return res.send(err);
+//   return res.send(sup);
+// });
+
   // console.dir(req)
 
   // Supervisor.findOne({
@@ -47,6 +61,6 @@ router.get("/test", function (req, res, next) {
 
   // req.flash('danger', 'hello!');
   // res.render("register");
-})
+// })
 
 module.exports = router;
