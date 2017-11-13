@@ -1,13 +1,11 @@
-var jwt = require('jsonwebtoken');
+function loggedIn(req, res, next) {
+  var { isLoggedIn } = res.locals;
 
-var isAuthenticated = require("../helpers").isAuthenticated;
-
-function requireAuth(req, res, next) {
-  
-  if (!isAuthenticated(req)) {
-    res.locals.isAuthenticated = false;
+  if (isLoggedIn) {
+    return next();
+  }
     req.session = null;
-    req.flash("danger", "You must be logged In")
+  req.flash("danger", "You must be logged In");
     res.redirect("/login");
   } 
   res.locals.isAuthenticated = true;
