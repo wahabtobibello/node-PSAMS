@@ -1,24 +1,30 @@
-function decodeJwt(token) {
-  return jwt.verify(token, process.env.SECRET_KEY);
+var jwt = require('jsonwebtoken');
+var User = require("../models/User");
+
+function decodeJwt(token, prop = null) {
+  var payload = jwt.verify(token, process.env.SECRET_KEY);
+  if (prop === null) return payload;
+  return payload[prop];
 }
-function isAuthenticated(req) {
-  if (req.session && req.session.accessToken) {
-    var token = req.session.accessToken;
-    try {
-      decodeJwt(req.session.accessToken);
-      return true;
-    } catch (err) {
-      return false;
-    }
-  } else {
-    return false;
+
+function getUserCredentials(req) {
+  try {
+    var payload = decodeJwt(req.session && req.session.accessToken);
+    return {
+      isLoggedIn: true,
+      isSupervisor: payload.is_admin,
+      userId: payload.sub
+    };
+  } catch (err) {
+    return {
+      isLoggedIn: false
+    };
   }
 }
 function sendErrorMessage(req, res, page, message, data = null) {
   req.flash("danger", message);
-  res.render(page, { data });
+  return res.render(page, data);
 }
 
-module.exports.decodeJwt = decodeJwt;
-module.exports.isAuthenticated = isAuthenticated;
+module.exports.getUserCredentials = getUserCredentials;
 module.exports.sendErrorMessage = sendErrorMessage;
