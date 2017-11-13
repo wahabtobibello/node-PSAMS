@@ -13,7 +13,7 @@ require('dotenv').config();
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var helper = require("./helpers");
+var middleware = require("./middlewares");
 var User = require("./models/User");
 
 var app = express();
@@ -59,21 +59,7 @@ db.once('open', function () {
   console.log("Connected to Database!!")
 })
 
-app.use(function (req, res, next) {
-  res.locals = {  
-    ...res.locals,
-    ...helper.getUserCredentials(req)
-  }
-  if (res.locals.isLoggedIn) {
-    User.findById(res.locals.userId, function (err, currentUser) {
-      if (err) {
-        next(err);
-      }
-      res.locals.user = currentUser;
-      return next();
-    })
-  }
-});
+app.use(middleware.setUserCredentials);
 
 app.use('/', index);
 app.use('/users', users);
