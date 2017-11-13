@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
 
 router
   .route("/login")
-  .get(function (req, res, next) {
+  .get(middleware.loggedOut, function (req, res, next) {
     res.render('login', { csrfToken: req.csrfToken() });
   })
   .post(function (req, res, next) {
