@@ -13,6 +13,8 @@ require('dotenv').config();
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var helper = require("./helpers");
+var User = require("./models/User");
 
 var app = express();
 
@@ -39,8 +41,8 @@ app.use(cookieSession({
   keys: [process.env.COOKIE_SECRET],
   maxAge: 60 * 60 * 1000, // 1 hour
   domain: process.env.COOKIE_DOMAIN,
-  secure: true,
-  httpOnly: true
+  // secure: true,
+  // httpOnly: true
 }))
 app.use(flash());
 app.use(helmet());
@@ -56,6 +58,22 @@ db.once('open', function () {
   // we're connected!
   console.log("Connected to Database!!")
 })
+
+app.use(function (req, res, next) {
+  res.locals = {  
+    ...res.locals,
+    ...helper.getUserCredentials(req)
+  }
+  if (res.locals.isLoggedIn) {
+    User.findById(res.locals.userId, function (err, currentUser) {
+      if (err) {
+        next(err);
+      }
+      res.locals.user = currentUser;
+      return next();
+    })
+  }
+});
 
 app.use('/', index);
 app.use('/users', users);
