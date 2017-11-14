@@ -5,8 +5,7 @@ const jwt = require("jsonwebtoken");
 const Student = require("../models/Student");
 const Supervisor = require("../models/Supervisor");
 const middleware = require("../middlewares");
-const sendErrorMessage = require("../helpers").sendErrorMessage;
-const asyncMiddleware = require("../helpers").asyncMiddleware;
+const helper = require("../helpers");
 
 const router = express.Router();
 
@@ -29,25 +28,25 @@ router
 			.not()
 			.isEmpty()
 	],
-	asyncMiddleware(async (req, res, next) => {
+	helper.wrapAsyncMiddleware(async (req, res, next) => {
 		const { matricNumber, password } = req.body;
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			const errorObjs = errors.array();
 			const errorMsg = errorObjs[0].msg;
-			sendErrorMessage(req, res, "login", errorMsg, { csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(req, res, "login", errorMsg, { csrfToken: req.csrfToken() });
 			return;
 		}
 
 		const newStudentUser = await Student.findOne({ matricNumber }).exec();
 		if (!newStudentUser) {
-			sendErrorMessage(req, res, "login", "User not found", { csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(req, res, "login", "User not found", { csrfToken: req.csrfToken() });
 			return;
 		}
 
 		const valid = await newStudentUser.verifyPassword(password);
 		if (!valid) {
-			sendErrorMessage(req, res, "login", "Username and Password Mismatch", { csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(req, res, "login", "Username and Password Mismatch", { csrfToken: req.csrfToken() });
 			return;
 		}
 
@@ -101,14 +100,14 @@ router
 			.not()
 			.isEmpty()
 	],
-	asyncMiddleware(async (req, res, next) => {
+	helper.wrapAsyncMiddleware(async (req, res, next) => {
 		const { firstName, lastName, matricNumber, password, } = req.body;
-
+		validationResult.throws();
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			const errorObjs = errors.array();
 			const errorMsg = errorObjs[0].msg;
-			sendErrorMessage(req, res, "register", errorMsg, { firstName, lastName, matricNumber, csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(req, res, "register", errorMsg, { firstName, lastName, matricNumber, csrfToken: req.csrfToken() });
 			return;
 		}
 
@@ -122,7 +121,7 @@ router
 		});
 		const assignedSupervisor = await Supervisor.findOne({ staffNumber: 123456789 }).exec();
 		newStudentRegistration.supervisor = assignedSupervisor;
-		
+
 		const savedData = await newStudentRegistration.save();
 		
 		req.flash("info", "You can now log in");

@@ -10,7 +10,7 @@ const decodeJwt = (token, prop = null) => {
 	}
 };
 
-const asyncMiddleware = fn => (
+const wrapAsyncMiddleware = fn => (
 	req, res, next) =>
 	Promise.resolve(fn(req, res, next)).catch(next);
 
@@ -21,4 +21,4 @@ const sendErrorMessage = (req, res, page, message, data = null) => {
 
 module.exports.decodeJwt = decodeJwt;
 module.exports.sendErrorMessage = sendErrorMessage;
-module.exports.asyncMiddleware = asyncMiddleware;
+module.exports.wrapAsyncMiddleware = wrapAsyncMiddleware;
