@@ -4,18 +4,19 @@ var helper = require("../helpers");
 function setUserCredentials(req, res, next) {
 	var payload = helper.decodeJwt(req.session && req.session.accessToken);
 	if (payload) {
-		res.locals.isLoggedIn = !!payload;
 		res.locals.isSupervisor = payload.is_admin;
 		res.locals.userId = payload.sub;
 		User.findById(payload.sub, function (err, currentUser) {
 			if (err) {
 				return next(err);
 			}
+			res.locals.isLoggedIn = !!currentUser;
 			res.locals.user = currentUser;
 			return next();
 		});
 	} else {
 		res.locals.isLoggedIn = !!payload;
+		req.session = null;
 		return next();
 	}
 }
