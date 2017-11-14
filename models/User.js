@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
-var mongooseBcrypt = require("mongoose-bcrypt");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const mongooseBcrypt = require("mongoose-bcrypt");
+const Schema = mongoose.Schema;
 
-var nameSchema = new Schema({
+const nameSchema = new Schema({
 	first: {
 		type: String,
 		required: true
@@ -12,7 +12,7 @@ var nameSchema = new Schema({
 		required: true
 	},
 });
-var userSchema = new Schema({
+const userSchema = new Schema({
 	name: nameSchema,
 	password: {
 		type: String,

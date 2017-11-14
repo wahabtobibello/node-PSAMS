@@ -1,8 +1,8 @@
-var mongoose = require("mongoose");
-var User = require("./User");
-var Schema = mongoose.Schema;
+const mongoose = require("mongoose");
+const User = require("./User");
+const Schema = mongoose.Schema;
 
-var supervisorSchema = new Schema({
+const supervisorSchema = new Schema({
 	staffNumber: {
 		type: Number,
 		required: true,

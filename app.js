@@ -1,21 +1,21 @@
-var express = require("express");
-var path = require("path");
-// var favicon = require("serve-favicon");
-var logger = require("morgan");
-var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
-var sassMiddleware = require("node-sass-middleware");
-var cookieSession = require("cookie-session");
-var flash = require("flash");
-var helmet = require("helmet");
-var csrf = require("csurf");
+const express = require("express");
+const path = require("path");
+// const favicon = require("serve-favicon");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const sassMiddleware = require("node-sass-middleware");
+const cookieSession = require("cookie-session");
+const flash = require("flash");
+const helmet = require("helmet");
+const csrf = require("csurf");
 require("dotenv").config();
 
-var index = require("./routes/index");
-var users = require("./routes/users");
-var middleware = require("./middlewares");
+const index = require("./routes/index");
+const users = require("./routes/users");
+const middleware = require("./middlewares");
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -47,13 +47,13 @@ app.use(flash());
 app.use(helmet());
 app.use(csrf({ cookie: true }));
 
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/psams", { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", function () {
+db.once("open", () => {
 	// we're connected!
 	console.log("Connected to Database!!");
 });

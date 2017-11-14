@@ -1,11 +1,11 @@
-var mongoose = require("mongoose");
-var autopopulate = require("mongoose-autopopulate");
+const mongoose = require("mongoose");
+const autopopulate = require("mongoose-autopopulate");
 
-var User = require("./User");
+const User = require("./User");
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var studentSchema = new Schema({
+const studentSchema = new Schema({
 	matricNumber: {
 		type: Number,
 		required: true,
