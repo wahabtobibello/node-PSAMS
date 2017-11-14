@@ -16,7 +16,6 @@ const setUserCredentials = (req, res, next) => {
 		});
 	} else {
 		res.locals.isLoggedIn = !!payload;
-		req.session = null;
 		return next();
 	}
 };
