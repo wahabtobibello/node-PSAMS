@@ -19,6 +19,8 @@ const sendErrorMessage = (req, res, page, message, data = null) => {
 	return res.render(page, data);
 };
 
-module.exports.decodeJwt = decodeJwt;
-module.exports.sendErrorMessage = sendErrorMessage;
-module.exports.wrapAsyncMiddleware = wrapAsyncMiddleware;
+module.exports = {
+	decodeJwt,
+	sendErrorMessage,
+	wrapAsyncMiddleware
+};

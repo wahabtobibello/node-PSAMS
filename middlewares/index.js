@@ -7,7 +7,7 @@ const setUserCredentials = (req, res, next) => {
 		res.locals.isSupervisor = payload.is_admin;
 		res.locals.userId = payload.sub;
 		User.findById(payload.sub, (err, currentUser) => {
-			if(err) {
+			if (err) {
 				return next(err);
 			}
 			res.locals.isLoggedIn = !!currentUser;
@@ -56,8 +56,10 @@ const errorHandler = (err, req, res) => {
 	res.render("error");
 };
 
-module.exports.setUserCredentials = setUserCredentials;
-module.exports.loggedIn = loggedIn;
-module.exports.loggedOut = loggedOut;
-module.exports.notFoundHandler = notFoundHandler;
-module.exports.errorHandler = errorHandler;
+module.exports = {
+	setUserCredentials,
+	loggedIn,
+	loggedOut,
+	notFoundHandler,
+	errorHandler
+};
