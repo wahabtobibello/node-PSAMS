@@ -9,14 +9,14 @@ const helper = require("../helpers");
 
 const router = express.Router();
 
-router.get("/", middleware.loggedIn, (req, res) => {
-	res.render("index");
+router.get("/", middleware.loggedIn, (request, response) => {
+	response.render("index");
 });
 
 router
 	.route("/login")
-	.get(middleware.loggedOut, (req, res) => {
-		res.render("login", { csrfToken: req.csrfToken() });
+	.get(middleware.loggedOut, (request, response) => {
+		response.render("login", { csrfToken: request.csrfToken() });
 	})
 	.post(
 	[
@@ -28,45 +28,45 @@ router
 			.not()
 			.isEmpty()
 	],
-	helper.wrapAsyncMiddleware(async (req, res, next) => {
-		const { matricNumber, password } = req.body;
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			const errorObjs = errors.array();
+	helper.wrapAsyncMiddleware(async (request, response, next) => {
+		const { matricNumber, password } = request.body;
+		const results = validationResult(request);
+		if (!results.isEmpty()) {
+			const errorObjs = results.array();
 			const errorMsg = errorObjs[0].msg;
-			helper.sendErrorMessage(req, res, "login", errorMsg, { csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(request, response, "login", errorMsg, { csrfToken: request.csrfToken() });
 			return;
 		}
 
 		const newStudentUser = await Student.findOne({ matricNumber }).exec();
 		if (!newStudentUser) {
-			helper.sendErrorMessage(req, res, "login", "User not found", { csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(request, response, "login", "User not found", { csrfToken: request.csrfToken() });
 			return;
 		}
 
 		const valid = await newStudentUser.verifyPassword(password);
 		if (!valid) {
-			helper.sendErrorMessage(req, res, "login", "Username and Password Mismatch", { csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(request, response, "login", "Username and Password Mismatch", { csrfToken: request.csrfToken() });
 			return;
 		}
 
 		const token = jwt.sign({
 			exp: Math.floor(Date.now() / 1000) + 3600,
 			nbf: Math.floor(Date.now() / 1000),
-			iss: req.baseUrl,
+			iss: request.baseUrl,
 			sub: newStudentUser._id,
 			iat: Math.floor(Date.now() / 1000),
 			is_admin: newStudentUser.role === "Supervisor"
 		}, process.env.SECRET_KEY);
-		req.session.accessToken = token;
-		res.redirect("/");
+		request.session.accessToken = token;
+		response.redirect("/");
 	})
 	);
 
 router
 	.route("/register")
-	.get(middleware.loggedOut, (req, res) => {
-		res.render("register", { csrfToken: req.csrfToken() });
+	.get(middleware.loggedOut, (request, response) => {
+		response.render("register", { csrfToken: request.csrfToken() });
 	})
 	.post(
 	[
@@ -78,8 +78,8 @@ router
 			.exists(),
 		body("confirmPassword")
 			.exists()
-			.custom((value, { req }) => {
-				return value === req.body.password;
+			.custom((value, { request }) => {
+				return value === request.body.password;
 			})
 			.withMessage("Passwords do not match"),
 		body("matricNumber")
@@ -100,14 +100,14 @@ router
 			.not()
 			.isEmpty()
 	],
-	helper.wrapAsyncMiddleware(async (req, res, next) => {
-		const { firstName, lastName, matricNumber, password, } = req.body;
+	helper.wrapAsyncMiddleware(async (request, response, next) => {
+		const { firstName, lastName, matricNumber, password, } = request.body;
 		validationResult.throws();
-		const errors = validationResult(req);
-		if (!errors.isEmpty()) {
-			const errorObjs = errors.array();
+		const results = validationResult(request);
+		if (!results.isEmpty()) {
+			const errorObjs = results.array();
 			const errorMsg = errorObjs[0].msg;
-			helper.sendErrorMessage(req, res, "register", errorMsg, { firstName, lastName, matricNumber, csrfToken: req.csrfToken() });
+			helper.sendErrorMessage(request, response, "register", errorMsg, { firstName, lastName, matricNumber, csrfToken: request.csrfToken() });
 			return;
 		}
 
@@ -124,17 +124,17 @@ router
 
 		const savedData = await newStudentRegistration.save();
 		
-		req.flash("info", "You can now log in");
-		res.redirect("/login");
+		request.flash("info", "You can now log in");
+		response.redirect("/login");
 	})
 	);
 
-router.get("/logout", (req, res) => {
-	req.session = null;
-	res.redirect("/");
+router.get("/logout", (request, response) => {
+	request.session = null;
+	response.redirect("/");
 });
 
-// router.get("/test", (req, res, next) =>{
+// router.get("/test", (request, response, next) =>{
 // const supervisor = new Supervisor({
 //   name: {
 //     first: "Albert",
@@ -143,22 +143,22 @@ router.get("/logout", (req, res) => {
 //   staffNumber: 123456789,
 //   password: "nutella"
 // })
-// supervisor.save(const (err, sup) =>{
-//   if (err) return res.send(err);
-//   return res.send(sup);
+// supervisor.save(const (error, sup) =>{
+//   if (error) return response.send(error);
+//   return response.send(sup);
 // });
 
-// console.dir(req)
+// console.dir(request)
 
 // Supervisor.findOne({
 //   staffNumber: 123456789
-// }).exec(const (err, supervisor) =>{
-//   if (err) return next(err);
-//   res.send(supervisor);
+// }).exec(const (error, supervisor) =>{
+//   if (error) return next(error);
+//   response.send(supervisor);
 // })
 
-// req.flash('danger', 'hello!');
-// res.render("register");
+// request.flash('danger', 'hello!');
+// response.render("register");
 // })
 
 module.exports = router;

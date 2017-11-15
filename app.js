@@ -63,7 +63,7 @@ app.use(middleware.setUserCredentials);
 app.use("/", index);
 app.use("/users", users);
 
-app.use(middleware.notFoundHandler);
+app.use(middleware.notFound);
 
 app.use(middleware.errorHandler);
 

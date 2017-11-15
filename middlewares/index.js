@@ -1,65 +1,65 @@
 const User = require("../models/User");
 const helper = require("../helpers");
 
-const setUserCredentials = (req, res, next) => {
-	const payload = helper.decodeJwt(req.session && req.session.accessToken);
+const setUserCredentials = (request, response, next) => {
+	const payload = helper.decodeJwt(request.session && request.session.accessToken);
 	if (payload) {
-		res.locals.isSupervisor = payload.is_admin;
-		res.locals.userId = payload.sub;
-		User.findById(payload.sub, (err, currentUser) => {
-			if (err) {
-				return next(err);
+		response.locals.isSupervisor = payload.is_admin;
+		response.locals.userId = payload.sub;
+		User.findById(payload.sub, (error, currentUser) => {
+			if (error) {
+				return next(error);
 			}
-			res.locals.isLoggedIn = !!currentUser;
-			res.locals.user = currentUser;
+			response.locals.isLoggedIn = !!currentUser;
+			response.locals.user = currentUser;
 			return next();
 		});
 	} else {
-		res.locals.isLoggedIn = !!payload;
+		response.locals.isLoggedIn = !!payload;
 		return next();
 	}
 };
 
-const loggedIn = (req, res, next) => {
-	const { isLoggedIn } = res.locals;
+const loggedIn = (request, response, next) => {
+	const { isLoggedIn } = response.locals;
 
 	if (isLoggedIn) {
 		return next();
 	}
-	req.session = null;
-	req.flash("danger", "You must be logged In");
-	res.redirect("/login");
+	request.session = null;
+	request.flash("danger", "You must be logged In");
+	response.redirect("/login");
 };
 
-const loggedOut = (req, res, next) => {
-	const { isLoggedIn } = res.locals;
+const loggedOut = (request, response, next) => {
+	const { isLoggedIn } = response.locals;
 	if (!isLoggedIn) {
 		return next();
 	}
-	req.flash("danger", "Logged out first");
-	res.redirect("/");
+	request.flash("danger", "Logged out first");
+	response.redirect("/");
 };
 
-const notFoundHandler = (req, res, next) => {
-	const err = new Error("Not Found");
-	err.status = 404;
-	next(err);
+const notFound = (request, response, next) => {
+	const error = new Error("Not Found");
+	error.status = 404;
+	next(error);
 };
 
-const errorHandler = (err, req, res) => {
+const errorHandler = (error, request, response) => {
 	// set locals, only providing error in development
-	res.locals.message = err.message;
-	res.locals.error = req.app.get("env") === "development" ? err : {};
+	response.locals.errorMessage = error.message;
+	response.locals.error = request.app.get("env") === "development" ? error : {};
 
 	// render the error page
-	res.status(err.status || 500);
-	res.render("error");
+	response.status(error.status || 500);
+	response.render("error");
 };
 
 module.exports = {
 	setUserCredentials,
 	loggedIn,
 	loggedOut,
-	notFoundHandler,
+	notFound,
 	errorHandler
 };
