@@ -63,8 +63,7 @@ router.route("/login")
 	})
 	);
 
-router
-	.route("/register")
+router.route("/register")
 	.get(middleware.loggedOut, (request, response) => {
 		response.render("register", { csrfToken: request.csrfToken() });
 	})
