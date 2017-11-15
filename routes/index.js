@@ -1,5 +1,5 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator/check");
+const { body } = require("express-validator/check");
 const jwt = require("jsonwebtoken");
 
 const Student = require("../models/Student");
@@ -11,12 +11,13 @@ const router = express.Router();
 
 router.route("/")
 	.get(middleware.loggedIn, (request, response) => {
-	response.render("index");
-});
+		response.render("index");
+	});
 
 router.route("/login")
 	.get(middleware.loggedOut, (request, response) => {
-		response.render("login", { csrfToken: request.csrfToken() });
+		response.locals.csrfToken = request.csrfToken();
+		response.render("login");
 	})
 	.post(
 	[
@@ -26,28 +27,22 @@ router.route("/login")
 			.exists(),
 		body("*")
 			.not()
-			.isEmpty()
+			.isEmpty(),
+		middleware.validationResultHandler
 	],
 	helper.wrapAsyncMiddleware(async (request, response, next) => {
-		const result = validationResult(request);
-		if (!result.isEmpty()) {
-			const errorObjs = result.array();
-			const errorMsg = errorObjs[0].msg;
-			helper.sendErrorMessage(request, response, "login", errorMsg, { csrfToken: request.csrfToken() });
-			return;
-		}
 
 		const { matricNumber, password } = request.body;
 		const newStudentUser = await Student.findOne({ matricNumber }).exec();
 		if (!newStudentUser) {
-			helper.sendErrorMessage(request, response, "login", "User not found", { csrfToken: request.csrfToken() });
-			return;
+			const error = new Error("User not found");
+			return next(error);
 		}
 
 		const valid = await newStudentUser.verifyPassword(password);
 		if (!valid) {
-			helper.sendErrorMessage(request, response, "login", "Username and Password Mismatch", { csrfToken: request.csrfToken() });
-			return;
+			const error = new Error("Username and Password Mismatch");
+			return next(error);
 		}
 
 		const token = jwt.sign({
@@ -65,7 +60,8 @@ router.route("/login")
 
 router.route("/register")
 	.get(middleware.loggedOut, (request, response) => {
-		response.render("register", { csrfToken: request.csrfToken() });
+		response.locals.csrfToken = request.csrfToken();
+		response.render("register");
 	})
 	.post(
 	[
@@ -97,16 +93,10 @@ router.route("/register")
 			}),
 		body("*")
 			.not()
-			.isEmpty()
+			.isEmpty(),
+		middleware.validationResultHandler
 	],
 	helper.wrapAsyncMiddleware(async (request, response, next) => {
-		const result = validationResult(request);
-		if (!result.isEmpty()) {
-			const errorObjs = result.array();
-			const errorMsg = errorObjs[0].msg;
-			helper.sendErrorMessage(request, response, "register", errorMsg, { firstName, lastName, matricNumber, csrfToken: request.csrfToken() });
-			return;
-		}
 
 		const { firstName, lastName, matricNumber, password, } = request.body;
 		const newStudentRegistration = new Student({
@@ -121,7 +111,7 @@ router.route("/register")
 		newStudentRegistration.supervisor = assignedSupervisor;
 
 		const savedData = await newStudentRegistration.save();
-		
+
 		request.flash("info", "You can now log in");
 		response.redirect("/login");
 	})
@@ -129,35 +119,11 @@ router.route("/register")
 
 router.route("/logout")
 	.get((request, response) => {
-	request.session = null;
-	response.redirect("/");
-});
+		request.session = null;
+		response.redirect("/");
+	});
 
-// router.get("/test", (request, response, next) =>{
-// const supervisor = new Supervisor({
-//   name: {
-//     first: "Albert",
-//     last: "Einstein"
-//   },
-//   staffNumber: 123456789,
-//   password: "nutella"
-// })
-// supervisor.save(const (error, sup) =>{
-//   if (error) return response.send(error);
-//   return response.send(sup);
-// });
-
-// console.dir(request)
-
-// Supervisor.findOne({
-//   staffNumber: 123456789
-// }).exec(const (error, supervisor) =>{
-//   if (error) return next(error);
-//   response.send(supervisor);
-// })
-
-// request.flash('danger', 'hello!');
-// response.render("register");
-// })
+router.use("/login", middleware.logInErrorHandler);
+router.use("/register", middleware.registerErrorHandler);
 
 module.exports = router;
