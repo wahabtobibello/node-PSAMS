@@ -1,10 +1,14 @@
 {
   "name": "node-psams",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "engines": {
     "node": ">=8",
     "npm":">=5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tobibello001/node-psams.git"
   },
   "scripts": {
     "start": "nodemon ./bin/www"
