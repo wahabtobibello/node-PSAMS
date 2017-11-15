@@ -9,12 +9,12 @@ const helper = require("../helpers");
 
 const router = express.Router();
 
-router.get("/", middleware.loggedIn, (request, response) => {
+router.route("/")
+	.get(middleware.loggedIn, (request, response) => {
 	response.render("index");
 });
 
-router
-	.route("/login")
+router.route("/login")
 	.get(middleware.loggedOut, (request, response) => {
 		response.render("login", { csrfToken: request.csrfToken() });
 	})
@@ -29,15 +29,15 @@ router
 			.isEmpty()
 	],
 	helper.wrapAsyncMiddleware(async (request, response, next) => {
-		const { matricNumber, password } = request.body;
-		const results = validationResult(request);
-		if (!results.isEmpty()) {
-			const errorObjs = results.array();
+		const result = validationResult(request);
+		if (!result.isEmpty()) {
+			const errorObjs = result.array();
 			const errorMsg = errorObjs[0].msg;
 			helper.sendErrorMessage(request, response, "login", errorMsg, { csrfToken: request.csrfToken() });
 			return;
 		}
 
+		const { matricNumber, password } = request.body;
 		const newStudentUser = await Student.findOne({ matricNumber }).exec();
 		if (!newStudentUser) {
 			helper.sendErrorMessage(request, response, "login", "User not found", { csrfToken: request.csrfToken() });
@@ -101,16 +101,15 @@ router
 			.isEmpty()
 	],
 	helper.wrapAsyncMiddleware(async (request, response, next) => {
-		const { firstName, lastName, matricNumber, password, } = request.body;
-		validationResult.throws();
-		const results = validationResult(request);
-		if (!results.isEmpty()) {
-			const errorObjs = results.array();
+		const result = validationResult(request);
+		if (!result.isEmpty()) {
+			const errorObjs = result.array();
 			const errorMsg = errorObjs[0].msg;
 			helper.sendErrorMessage(request, response, "register", errorMsg, { firstName, lastName, matricNumber, csrfToken: request.csrfToken() });
 			return;
 		}
 
+		const { firstName, lastName, matricNumber, password, } = request.body;
 		const newStudentRegistration = new Student({
 			name: {
 				first: firstName,
@@ -129,7 +128,8 @@ router
 	})
 	);
 
-router.get("/logout", (request, response) => {
+router.route("/logout")
+	.get((request, response) => {
 	request.session = null;
 	response.redirect("/");
 });
