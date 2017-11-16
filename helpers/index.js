@@ -1,5 +1,13 @@
 const jwt = require("jsonwebtoken");
 
+const daysOfTheWeek =["sunday",
+											"monday",
+											"tuesday",
+											"wednesday",
+											"thursday",
+											"friday",
+											"saturday"];
+
 const decodeJwt = (token, prop = null) => {
 	try {
 		const payload = jwt.verify(token, process.env.SECRET_KEY);
@@ -20,6 +28,7 @@ const sendErrorMessage = (request, response, page, message, data = null) => {
 };
 
 module.exports = {
+	daysOfTheWeek,
 	decodeJwt,
 	sendErrorMessage,
 	wrapAsyncMiddleware
