@@ -4,14 +4,15 @@
   "private": true,
   "engines": {
     "node": ">=8",
-    "npm":">=5"
+    "npm": ">=5"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/tobibello001/node-psams.git"
   },
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "test": "jest"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -25,6 +26,7 @@
     "helmet": "^3.9.0",
     "flash": "^1.1.0",
     "jsonwebtoken": "^8.1.0",
+    "moment": "^2.19.2",
     "mongoose": "^4.12.0",
     "mongoose-autopopulate": "^0.6.0",
     "mongoose-bcrypt": "^1.5.0",
@@ -35,6 +37,8 @@
     "serve-favicon": "^2.4.5"
   },
   "devDependencies": {
-    "eslint": "^4.11.0"
+    "eslint": "^4.11.0",
+    "jest": "^21.2.1",
+    "supertest": "^3.0.0"
   }
 }
