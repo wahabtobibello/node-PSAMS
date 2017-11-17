@@ -4,6 +4,7 @@ const autopopulate = require("mongoose-autopopulate");
 const User = require("./User");
 
 const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const studentSchema = new Schema({
 	matricNumber: {
@@ -12,7 +13,7 @@ const studentSchema = new Schema({
 		unique: true
 	},
 	supervisor: {
-		type: Schema.Types.ObjectId,
+		type: ObjectId,
 		ref: "Supervisor",
 		required: true,
 		autopopulate: true
