@@ -35,14 +35,16 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(cookieSession({
-	name: "access_token",
-	keys: [process.env.COOKIE_SECRET],
-	maxAge: 60 * 60 * 1000, // 1 hour
-	domain: process.env.COOKIE_DOMAIN,
-	// secure: true,
-	// httpOnly: true
-}));
+const cookieSessionOptions = {};
+cookieSessionOptions.name = "access_token";
+cookieSessionOptions.keys = [process.env.COOKIE_SECRET];
+cookieSessionOptions.maxAge = 60 * 60 * 1000;
+cookieSessionOptions.domain = process.env.COOKIE_DOMAIN;
+if (process.env.NODE_ENV === "production") {
+	cookieSessionOptions.secure = true;
+	cookieSessionOptions.httpOnly = true;
+}
+app.use(cookieSession(cookieSessionOptions));
 app.use(flash());
 app.use(helmet());
 app.use(csrf({ cookie: true }));
