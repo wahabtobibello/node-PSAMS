@@ -16,7 +16,7 @@ router.route("/")
 
 router.route("/login")
 	.get(middleware.loggedOut, (request, response) => {
-		response.locals.csrfToken = request.csrfToken();
+		response.locals.csrfToken = request.csrfToken && request.csrfToken() || "";
 		response.render("login");
 	})
 	.post(
@@ -60,19 +60,15 @@ router.route("/login")
 
 router.route("/register")
 	.get(middleware.loggedOut, (request, response) => {
-		response.locals.csrfToken = request.csrfToken();
+		response.locals.csrfToken = request.csrfToken && request.csrfToken() || "";
 		response.render("register");
 	})
 	.post(
 	[
-		body("firstName")
-			.exists(),
-		body("lastName")
-			.exists(),
-		body("password")
-			.exists(),
-		body("confirmPassword")
-			.exists()
+		body("firstName").exists().withMessage("First name not specified"),
+		body("lastName").exists().withMessage("Last name not specified"),
+		body("password").exists().withMessage("Password not specified"),
+		body("confirmPassword").exists()
 			.custom((value, { request }) => {
 				return value === request.body.password;
 			})
@@ -90,7 +86,7 @@ router.route("/register")
 							return true;
 						}
 					});
-			}),
+			}).withMessage("Matric Number not specified"),
 		body("*")
 			.not()
 			.isEmpty(),

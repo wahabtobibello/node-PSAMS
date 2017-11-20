@@ -54,7 +54,7 @@ const validationResultHandler = (request, response, next) => {
 
 const logInErrorHandler = (error, request, response, next) => {
 	request.flash("danger", error.message);
-	response.locals.csrfToken = request.csrfToken();
+	response.locals.csrfToken = request.csrfToken && request.csrfToken() || "";
 	response.status(error.status || 401);
 	return response.render("login");
 };
@@ -62,7 +62,7 @@ const logInErrorHandler = (error, request, response, next) => {
 const registerErrorHandler = (error, request, response, next) => {
 	request.flash("danger", error.message);
 	response.locals.body = request.body;
-	response.locals.csrfToken = request.csrfToken();
+	response.locals.csrfToken = request.csrfToken && request.csrfToken() || "";
 	response.status(error.status || 400);
 	return response.render("register");
 };
