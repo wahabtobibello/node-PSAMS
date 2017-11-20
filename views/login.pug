@@ -1,17 +1,51 @@
-extends layout
-
-block content  
-  .container
-    .col-lg-6.offset-lg-3.col-md-8.offset-md-2
-      h3.mt-4.mb-3 Log In
-      hr/
-      form(action="/login", method="post")
-        .form-group
-          label(for="matricNumber") Matric No.
-          input.form-control(id="matricNumber", name="matricNumber", type="number")
-        .form-group
-          label(for="password") Password
-          input.form-control(id="password", name="password", type="password")
-        .form-group
-          input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
-        button.btn.btn-primary(type="submit") Log In
+doctype html
+html.no-js(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    title Project Supervision Appointment Management System
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    link(rel='apple-touch-icon', href='apple-touch-icon.png')
+    // Place favicon.ico in the root directory 
+    link(rel='stylesheet', href='css/vendor.css')
+    link(rel='stylesheet', href='css/app.css')
+    link(rel='stylesheet', href='css/custom.css')
+  body
+    .auth
+      .auth-container
+        .card
+          header.auth-header
+            h1.auth-title Log In
+          .auth-content
+            while message = flash.shift()
+              .alert.alert-dismissible.fade.show(class=`alert-${message.type}`, role="alert") #{message.message}
+                button.close(type="button", data-dismiss="alert" aria-label="Close")
+                  span(aria-hidden="true") &times;
+            form#login-form(action='/login', method='POST')
+              .form-group
+                label(for='matricNumber') Matric Number
+                input.form-control.underlined#matricNumber(type='number', name='matricNumber', placeholder='Your matriculation number', required='')
+              .form-group
+                label(for='password') Password
+                input.form-control.underlined#password(type='password', name='password', placeholder='Your password', required='')
+              .form-group
+                input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
+              .form-group
+                button.btn.btn-block.btn-primary(type='submit') Login
+              .form-group
+                p.text-muted.text-center
+                  | Do not have an account? 
+                  a(href='/register') Sign Up!
+              p.text-center OR
+              .form-group
+                p.text-muted.text-center
+                  a(href='#') Sign In as Supervisor!
+    // Reference block for JS 
+    .ref#ref
+      .color-primary
+      .chart
+        .color-primary
+        .color-secondary
+    script(src='js/vendor.js')
+    script(src='js/app.js')

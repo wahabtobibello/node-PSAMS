@@ -1,27 +1,58 @@
-extends layout
-
-block content  
-  .container
-    .col-lg-6.offset-lg-3.col-md-8.offset-md-2
-      h3.mt-4.mb-3 Register
-      hr/
-      form(action="/register", method="post")
-        .form-row
-          .form-group.col-md-6
-            label(for="firstName") First Name
-            input.form-control(id="firstName", name="firstName", value=`${body && body.firstName || ""}` required)
-          .form-group.col-md-6 
-            label(for="lastName") Last Name
-            input.form-control(id="lastName", name="lastName", value=`${body && body.lastName || ""}` required)
-        .form-group
-          label(for="matricNumber") Matric No. 
-          input.form-control(id="matricNumber" name="matricNumber" type="number", value=`${body && body.matricNumber || ""}` required)
-        .form-group
-          label(for="password") Password
-          input.form-control(id="password" name="password"  type="password" required)
-        .form-group
-          label(for="confirmPassword") Confirm Password
-          input.form-control(id="confirmPassword" name="confirmPassword"  type="password" required)
-        .form-group
-          input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
-        button.btn.btn-dark.btn-block(type="submit") Register
+doctype html
+html.no-js(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    title Project Supervision Appointment Management System
+    meta(name='description', content='')
+    meta(name='viewport', content='width=device-width,initial-scale=1')
+    link(rel='apple-touch-icon', href='apple-touch-icon.png')
+    // Place favicon.ico in the root directory 
+    link(rel='stylesheet', href='css/vendor.css')
+    link(rel='stylesheet', href='css/app.css')
+    link(rel='stylesheet', href='css/custom.css')
+  body
+    .auth
+      .auth-container
+        .card
+          header.auth-header
+            h1.auth-title Register
+          .auth-content
+            while message = flash.shift()
+              .alert.alert-dismissible.fade.show(class=`alert-${message.type}`, role="alert") #{message.message}
+                button.close(type="button", data-dismiss="alert" aria-label="Close")
+                  span(aria-hidden="true") &times;
+            form#signup-form(action='/register', method='POST')
+              .form-group
+                label(for='firstName') Name
+                .row
+                  .col-sm-6
+                    input.form-control.underlined#firstName(type='text', name='firstName', placeholder='Enter first name', value=`${body && body.firstName || ""}`, required)
+                  .col-sm-6
+                    input.form-control.underlined#lastName(type='text', name='lastName', placeholder='Enter last name', value=`${body && body.lastName || ""}`, required)
+              .form-group
+                label(for='matricNumber') Matric Number
+                input.form-control.underlined#matricNumber(type='number', name='matricNumber', placeholder='Enter matriculation number', value=`${body && body.matricNumber || ""}`, required)
+              .form-group
+                label(for='password') Password
+                .row
+                  .col-sm-6
+                    input.form-control.underlined#password(type='password', name='password', placeholder='Enter password', required)
+                  .col-sm-6
+                    input.form-control.underlined#confirmPassword(type='password', name='confirmPassword', placeholder='Re-type password', required)
+              .form-group
+                input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
+              .form-group
+                button.btn.btn-block.btn-primary(type='submit') Sign Up
+              .form-group
+                p.text-muted.text-center
+                  | Already have an account? 
+                  a(href='/login') Login!
+    // Reference block for JS 
+    .ref#ref
+      .color-primary
+      .chart
+        .color-primary
+        .color-secondary
+    script(src='js/vendor.js')
+    script(src='js/app.js')

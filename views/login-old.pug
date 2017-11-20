@@ -1,0 +1,17 @@
+extends layout
+
+block content  
+  .container
+    .col-lg-6.offset-lg-3.col-md-8.offset-md-2
+      h3.mt-4.mb-3 Log In
+      hr/
+      form(action="/login", method="post")
+        .form-group
+          label(for="matricNumber") Matric No.
+          input.form-control(id="matricNumber", name="matricNumber", type="number")
+        .form-group
+          label(for="password") Password
+          input.form-control(id="password", name="password", type="password")
+        .form-group
+          input.form-control(type="hidden", name="_csrf", value=`${csrfToken}`)
+        button.btn.btn-primary(type="submit") Log In
