@@ -1,6 +1,6 @@
 const supertest = require("supertest");
 const cheerio = require("cheerio");
-const app = require("../app");
+// const app = require("../src/app");
 
 describe("register route", () => {
   const request = supertest.agent("http://localhost:3000");
