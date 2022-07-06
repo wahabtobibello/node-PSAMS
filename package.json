@@ -27,7 +27,7 @@
     "flash": "^1.1.0",
     "helmet": "^3.9.0",
     "jsonwebtoken": "^8.1.0",
-    "moment": "^2.19.2",
+    "moment": "^2.29.4",
     "mongoose": "^4.12.0",
     "mongoose-autopopulate": "^0.6.0",
     "mongoose-bcrypt": "^1.5.0",
