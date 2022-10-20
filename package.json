@@ -28,7 +28,7 @@
     "helmet": "^3.9.0",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.19.2",
-    "mongoose": "^4.12.0",
+    "mongoose": "^4.13.21",
     "mongoose-autopopulate": "^0.6.0",
     "mongoose-bcrypt": "^1.5.0",
     "morgan": "^1.9.0",
