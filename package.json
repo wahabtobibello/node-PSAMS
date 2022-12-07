@@ -22,7 +22,7 @@
     "csurf": "^1.9.0",
     "debug": "^3.1.0",
     "dotenv": "^4.0.0",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "express-validator": "^4.3.0",
     "flash": "^1.1.0",
     "helmet": "^3.9.0",
